@@ -45,9 +45,12 @@ mod cs {
 }
 
 fn main() {
-    const K: usize = 4;
-    const M: usize = 4;
-    const N: usize = 4;
+    const K: usize = 128;
+    const M: usize = 256;
+    const N: usize = 512;
+
+    const LOCAL_SIZE_X : usize = 32;
+    const LOCAL_SIZE_Y : usize = 32;
 
     //    let mut a = vec![0f32; K * M];
     //    let mut b = vec![0f32; N * K];
@@ -96,7 +99,7 @@ fn main() {
     );
 
     let command_buffer = AutoCommandBufferBuilder::new(device.clone(), queue.family()).unwrap()
-        .dispatch([M as u32, N as u32, 1],
+        .dispatch([(N / LOCAL_SIZE_X) as u32, (M / LOCAL_SIZE_Y) as u32, 1],
                   compute_pipeline.clone(),
                   descriptor_set.clone(),
                   [K as u32, M as u32, N as u32]).unwrap()
@@ -118,6 +121,7 @@ fn main() {
         for i in 0..K {
             expected_value += a[y * K + i] * b[x + i * N];
         }
+
         assert_eq!(*val, expected_value);
     }
     println!("Success");
