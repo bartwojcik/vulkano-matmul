@@ -16,16 +16,17 @@ layout(set = 0, binding = 2) writeonly buffer MatOut {
 
 layout(push_constant) uniform PushConstants {
     uint k; // matrix_a's number of columns and matrix_b's number of rows
+    uint m; // matrix_c's number of rows
+    uint n; // matrix_c's number of columns
 };
 
 void main() {
-    uint idx = gl_WorkGroupID.x;
-    uint idy = gl_WorkGroupID.y;
-    // n - matrix_b's number of columns
-    uint n = gl_NumWorkGroups.x;
+    uint x = gl_GlobalInvocationID.x;
+    uint y = gl_GlobalInvocationID.y;
+
     float result = 0.0;
     for (uint i = 0; i < k; ++i) {
-        result += matrix_a.data[idy * k + i] * matrix_b.data[idx + i * n];
+        result += matrix_a.data[y * k + i] * matrix_b.data[x + i * n];
     }
-    matrix_out.data[idy * n + idx] = result;
+    matrix_out.data[y * n + x] = result;
 }

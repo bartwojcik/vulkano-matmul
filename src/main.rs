@@ -96,10 +96,10 @@ fn main() {
     );
 
     let command_buffer = AutoCommandBufferBuilder::new(device.clone(), queue.family()).unwrap()
-        .dispatch([N as u32, M as u32, 1],
+        .dispatch([M as u32, N as u32, 1],
                   compute_pipeline.clone(),
                   descriptor_set.clone(),
-                  K as u32).unwrap()
+                  [K as u32, M as u32, N as u32]).unwrap()
         .build().unwrap();
     println!("Created command buffer");
 
