@@ -1,0 +1,8 @@
+[package]
+name = "vulkano_matmul"
+version = "0.1.0"
+authors = ["Bartosz Wojcik <bartwojc@gmail.com>"]
+
+[dependencies]
+vulkano = "0.7.1"
+vulkano-shader-derive = "0.7.1"
